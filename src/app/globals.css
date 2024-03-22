@@ -31,3 +31,13 @@ body {
     text-wrap: balance;
   }
 }
+/* Invert the selection color */
+::selection {
+  background-color: rgb(168 85 247); /* Background color when text is selected */
+  color: #ffffff; /* Text color when text is selected */
+}
+
+::-moz-selection {
+  background-color: #ffffff; /* Background color when text is selected in Firefox */
+  color: #000000; /* Text color when text is selected in Firefox */
+}
