@@ -1,6 +1,6 @@
-import HowToPlay from '@/components/HowToPlay'
-import GameRules from '@/components/GameRules'
-import CreateOrPlay from '@/components/CreateOrPlay'
+import HowToPlay from '@/components/home/HowToPlay'
+import GameRules from '@/components/home/GameRules'
+import CreateOrPlay from '@/components/home/CreateOrPlay'
 
 export default function Page() {
   return (
