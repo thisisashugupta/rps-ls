@@ -1,3 +1,5 @@
+'use client'
+
 import { FallbackProvider, JsonRpcProvider } from 'ethers'
 import { useMemo } from 'react'
 import type { Chain, Client, Transport } from 'viem'
