@@ -4,7 +4,6 @@ import RPS from '@/contracts/RPS.json'
 import { Contract } from 'ethers'
 import { useEthersProvider } from '@/app/providers/ethers/ethersProvider'
 import { gameAtom, gamePlayAtom } from '../app/store/atoms/game'
-import { c2State } from '@/app/store/selectors/move'
 import { Move } from '@/app/store/types/move'
 import { useSetRecoilState } from 'recoil'
 import { useAccount } from 'wagmi'
@@ -17,10 +16,9 @@ export default function useMonitorTxs() {
   const { address } = useAccount()
   const setGame = useSetRecoilState(gameAtom)
   const setGamePlay = useSetRecoilState(gamePlayAtom)
-  const setC2 = useSetRecoilState(c2State)
 
   /*
-  monitorNewTransactions
+  monitorNewGameDeployments
     fetches all the transactions that are mined after the current block
     checks if the transaction is a contract creation transaction
     checks if the contract is a RockPaperScissors contract
@@ -140,11 +138,20 @@ export default function useMonitorTxs() {
         // create a function call to contractAddress to check the state of c2
         const contract = new Contract(contractAddress, RPS.abi, provider)
         const c2 = await contract.c2()
+        const lastAction = await contract.lastAction()
         if (c2 !== BigInt(0)) {
-          localStorage.setItem('c2', String(c2))
-          setC2(c2)
+          localStorage.setItem('c2', String(Number(c2)))
+          localStorage.setItem('lastAction', String(Number(lastAction)))
           localStorage.setItem('hasPlayer2Played', String(true))
-          setGamePlay((prev) => ({...prev, hasPlayer2Played:true}))
+          setGame((prev) => ({
+            ...prev, 
+            c2: Number(c2), 
+            lastAction: Number(lastAction)
+          }))
+          setGamePlay((prev) => ({
+            ...prev, 
+            hasPlayer2Played:true
+          }))
         }
       } catch (error) {
         console.log('oops, error occured')
@@ -181,13 +188,24 @@ export default function useMonitorTxs() {
         // create a function call to contractAddress to check the state of stake
         const contract = new Contract(contractAddress, RPS.abi, provider)
         const stake = await contract.stake()
-        console.log('stake:', stake, typeof stake);
+        console.log('stake:', stake, typeof stake)
+        const lastAction = await contract.lastAction()
+        console.log('lastAction:', lastAction, typeof lastAction)
         if (stake === BigInt(0)) {
-          setGame((prev) => ({...prev, stake, c1: args?.[0] as Move}))
           localStorage.setItem('stake', String(stake))
+          localStorage.setItem('lastAction', String(Number(lastAction)))
           localStorage.setItem('c1', String(args?.[0]))
           localStorage.setItem('hasPlayer1Revealed', String(true))
-          setGamePlay((prev) => ({...prev, hasPlayer1Revealed:true}))
+          setGame((prev) => ({
+            ...prev, 
+            stake, 
+            lastAction: Number(lastAction), 
+            c1: args?.[0] as Move
+          }))
+          setGamePlay((prev) => ({
+            ...prev, 
+            hasPlayer1Revealed:true
+          }))
         }
       } catch (error) {
         console.log('oops, error occured')
@@ -197,5 +215,11 @@ export default function useMonitorTxs() {
   }
   
   
-  return { monitorNewGameDeployments, stopMonitorNewGameDeployments, monitorContract, monitorPlayer2Move, monitorPlayer1Reveal }
+  return { 
+    monitorNewGameDeployments, 
+    stopMonitorNewGameDeployments, 
+    monitorContract, 
+    monitorPlayer2Move, 
+    monitorPlayer1Reveal 
+  }
 }

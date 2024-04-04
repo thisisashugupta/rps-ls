@@ -33,7 +33,7 @@ export default function GameArea({ game_id }: { game_id: string }) {
         </div>
 
         {/* SHOW VALID PLAYER */}
-        <div>
+        <div className='my-4'>
           {Boolean(gameDetails.j1 && gameDetails.j2) ? 
             <>
               {
@@ -49,7 +49,7 @@ export default function GameArea({ game_id }: { game_id: string }) {
         </div>
 
         {/* TODO: TIMEOUT TIMER */}
-        <div>
+        <div className='w-full my-4 flex flex-col items-center border border-purple-500'>
           <TimeoutTimer />
         </div>
     </>

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import RPS from '@/contracts/RPS.json'
 import { useEthersSigner } from '@/app/providers/ethers/ethersSigner'
+import { useEthersProvider } from '@/app/providers/ethers/ethersProvider'
 import { Contract } from 'ethers'
-import { useRecoilState, useRecoilValue, RecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { gameAtom, gamePlayAtom } from '@/app/store/atoms/game'
 import useMonitorTxs from '@/hooks/useMonitorTxs'
 import SelectMove from '@/components/common/SelectMove'
@@ -18,9 +19,11 @@ const WinOrLoss = dynamic(() => import('./WinOrLoss'), { ssr: false })
 export default function PlayerB() {
   // signer
   const signer = useEthersSigner()
+  // provider
+  const provider = useEthersProvider()
   const { monitorPlayer1Reveal } = useMonitorTxs()
 
-  const game = useRecoilValue(gameAtom)
+  const [game, setGame] = useRecoilState(gameAtom)
   const [gamePlay, setGamePlay] = useRecoilState(gamePlayAtom)
   const c2 = useRecoilValue(c2State)
 
@@ -30,6 +33,14 @@ export default function PlayerB() {
 
 
   function handlePlay() {
+
+    async function getLastAction() {
+      const contract = new Contract(game.contractAddress!, RPS.abi, provider)
+      const lastAction = await contract.lastAction()
+      localStorage.setItem('lastAction', String(lastAction))
+      setGame((prev) => ({...prev, lastAction: Number(lastAction)}));
+    }
+
     async function play() {
       try {
         const contract = new Contract(game.contractAddress!, RPS.abi, signer);
@@ -39,15 +50,15 @@ export default function PlayerB() {
         const receipt = await tx.wait(1); // wait(confirms?: number, timeout?: number)⇒ Promise< null | TransactionReceipt >
         // console.log('receipt:', receipt);
         toast('Tx Successful!');
-
+        getLastAction();
         localStorage.setItem('hasPlayer2Played', 'true')
-        setGamePlay({ ...gamePlay, hasPlayer2Played: true })
-
+        setGamePlay((prev) => ({...prev, hasPlayer2Played: true}))
       } catch (error : any) {
           console.error(error)
         toast(String(error?.info?.error?.message))
       }
     }
+
     play();
   }
 
@@ -77,7 +88,7 @@ export default function PlayerB() {
       <div id='player1' className='border border-purple-500 rounded-lg p-6 my-6'>
         {gamePlay.isPlayer1TimedOut ? 
         <>
-          <Heading>Timeout for j1 to play</Heading>
+          <Heading>Timeout for j1 to reveal</Heading>
           <div className='my-4'>
             <Button 
               text='Get stake back' 

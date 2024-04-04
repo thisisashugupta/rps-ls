@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import RPS from '@/contracts/RPS.json'
 import { useEthersSigner } from '@/app/providers/ethers/ethersSigner'
 import { Contract } from 'ethers'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { gameAtom, gamePlayAtom } from '@/app/store/atoms/game'
 import { Move } from '@/app/store/types/move'
 import { decryptMove } from '@/lib/actions'
@@ -12,7 +12,6 @@ import Heading from '@/components/ui/heading'
 import Button from '@/components/ui/button'
 import Spinner from '@/components/ui/spinner'
 import dynamic from 'next/dynamic'
-import { c1State } from '@/app/store/selectors/move'
 const WinOrLoss = dynamic(() => import('./WinOrLoss'), { ssr: false })
 
 export default function PlayerA() {
@@ -20,8 +19,7 @@ export default function PlayerA() {
   const signer = useEthersSigner()
   const { monitorPlayer2Move } = useMonitorTxs()
 
-  const game = useRecoilValue(gameAtom)
-  const setC1 = useSetRecoilState(c1State)
+  const [game, setGame] = useRecoilState(gameAtom)
   const [gamePlay, setGamePlay] = useRecoilState(gamePlayAtom)
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export default function PlayerA() {
         toast('Tx Successful!');
         localStorage.setItem('c1', String(move))
         localStorage.setItem('hasPlayer1Revealed', String(true))
-        setC1(Number(move) as Move)
+        setGame((prev) => ({...prev, c1: Number(move)}))
         setGamePlay((prev) => ({...prev, hasPlayer1Revealed:true}))
       } catch (error : any) {
         console.error(error)
@@ -88,16 +86,7 @@ export default function PlayerA() {
       
       <div id='player1' className='border border-purple-500 rounded-lg p-6 my-6'>
 
-      {gamePlay.isPlayer2TimedOut ? 
-        <>
-          <Heading>Timeout for j2 to play</Heading>
-          <Button 
-            text='Get stake back' 
-            onClick={handleJ2Timeout} 
-            className='my-4'
-          />
-        </> :
-        gamePlay.hasPlayer2Played ?
+      {gamePlay.hasPlayer2Played ?
         gamePlay.hasPlayer1Revealed ?
         <WinOrLoss /> : 
         <>
@@ -108,6 +97,15 @@ export default function PlayerA() {
               onClick={handleRevealMove} 
             />
           </div>
+        </> :
+        gamePlay.isPlayer2TimedOut ? 
+        <>
+          <Heading>Timeout for j2 to play</Heading>
+          <Button 
+            text='Get stake back' 
+            onClick={handleJ2Timeout} 
+            className='my-4'
+          />
         </> :
         <Spinner/>
         }
