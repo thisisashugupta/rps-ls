@@ -46,7 +46,7 @@ export default function PlayerB() {
         const contract = new Contract(game.contractAddress!, RPS.abi, signer);
         toast('Approve the transaction request in your wallet.');
         const tx = await contract.play(c2, { value: game.stake });
-        toast('tx mined. waiting for confirmations...');
+        toast('tx submitted. waiting for confirmations...');
         const receipt = await tx.wait(1); // wait(confirms?: number, timeout?: number)⇒ Promise< null | TransactionReceipt >
         // console.log('receipt:', receipt);
         toast('Tx Successful!');
@@ -68,7 +68,7 @@ export default function PlayerB() {
         const contract = new Contract(game.contractAddress!, RPS.abi, signer);
         toast('Approve the transaction request in your wallet.');
         const tx = await contract.j1Timeout();
-        toast('tx mined. waiting for confirmations...');
+        toast('tx submitted. waiting for confirmations...');
         const receipt = await tx.wait(1); // wait(confirms?: number, timeout?: number)⇒ Promise< null | TransactionReceipt >
         // console.log('receipt:', receipt);
         toast('Tx Successful!');
