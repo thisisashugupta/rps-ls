@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Web3Provider } from "@/app/providers/Web3Provider";
-import RecoilProvider from "@/app/providers/RecoilProvider";
-import NavBar from "@/components/layout/NavBar";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import { Web3Provider } from "@/app/providers/Web3Provider"
+import RecoilProvider from "@/app/providers/RecoilProvider"
+import NavBar from "@/components/layout/NavBar"
+import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,6 +26,7 @@ export default function RootLayout({
           <Web3Provider>
             <NavBar />
             {children}
+            <Footer />
             <Toaster />
           </Web3Provider>
         </RecoilProvider>
