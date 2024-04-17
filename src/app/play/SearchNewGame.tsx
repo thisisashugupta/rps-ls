@@ -27,7 +27,7 @@ export default function SearchNewGame() {
   return (
     <div className='p-4'>
         <Spinner className='w-8 h-8'/>
-        <p className='my-4'>Looking for a Game for you</p>
+        <p className='my-4'>Finding a game for you</p>
     </div>
   );
 }

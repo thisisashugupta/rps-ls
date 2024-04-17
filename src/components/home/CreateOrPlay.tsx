@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function CreateOrPlay() {
   return (
-    <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-2">
+    <div className="mb-4 p-4 border border-purple-500 rounded-lg grid text-center lg:max-w-5xl lg:w-full lg:grid-cols-2">
         <Link
           href="/create"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -28,7 +28,7 @@ export default function CreateOrPlay() {
             </span>
           </h2>
         </Link>
-      </div>
+    </div>
     
   )
 }

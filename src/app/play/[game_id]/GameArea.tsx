@@ -9,7 +9,7 @@ import { gameAtom } from '@/app/store/atoms/game'
 import dynamic from 'next/dynamic'
 const PlayerA = dynamic(() => import('./PlayerA'), { ssr: false })
 const PlayerB = dynamic(() => import('./PlayerB'), { ssr: false })
-const TimeoutTimer = dynamic(() => import('./TimeoutTimer'), { ssr: false })
+const TimeoutTimer = dynamic(() => import('./TimeoutTimer'), { ssr: false, loading: () => <p>Loading...</p> })
 
 export default function GameArea({ game_id }: { game_id: string }) {
 
@@ -25,10 +25,19 @@ export default function GameArea({ game_id }: { game_id: string }) {
   return (
     <>
         {/* GAME DETAILS */}
-        <div className='w-full flex flex-col items-center border border-purple-500'>
+        <div className='w-full flex flex-col items-center'>
             <p className='px-4 py-2'>Game Contract Address: {game_id}</p>
-            {(address === gameDetails?.j1 as `0x${string}`) && <p className='px-4 py-2'>Player2: {gameDetails?.j2}</p>}
-            {(address === gameDetails?.j2 as `0x${string}`) && <p className='px-4 py-2'>Player1: {gameDetails?.j1}</p>}
+            {(address === gameDetails?.j1 as `0x${string}`) && <p className='px-4 py-2'>
+              <span className='font-semibold'>Player2: </span>
+              {gameDetails?.j2}
+              </p>
+            }
+            {(address === gameDetails?.j2 as `0x${string}`) && 
+              <p className='px-4 py-2'>
+                <span className='font-semibold'>Player1: </span>
+                {gameDetails?.j1}
+              </p>
+            }
             {gameDetails?.stake && <p className='px-4 py-2'>Stake: {String(formatEther(String(gameDetails?.stake)))} ETH</p>}
         </div>
 
