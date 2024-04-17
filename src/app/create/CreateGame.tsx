@@ -99,7 +99,7 @@ export default function CreateGame() {
 
 
   return (
-    <div id='rps_contract' className='w-full border border-purple-500 rounded-lg p-6 flex flex-col items-center'>
+    <div id='rps_contract' className='max-w-lg w-full border border-purple-500 rounded-lg p-6 flex flex-col items-center'>
       <Heading>Create Game</Heading>
 
           {/* move */}
@@ -112,7 +112,7 @@ export default function CreateGame() {
           </label>
           
           {/* second player address */}
-          <label className='min-w-max'>
+          <label className='w-full min-w-max'>
             second player&apos;s wallet address:
             <Input 
               type="text" 
@@ -125,7 +125,7 @@ export default function CreateGame() {
           <br />
 
           {/* stake amount */}
-          <label className='min-w-max'>
+          <label className='w-full min-w-max'>
             stake amount (ETH):
             <Input 
               type="number" 

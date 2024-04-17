@@ -28,13 +28,13 @@ function SelectMove({ className, moveState, keyTag }: MoveSelectorProps) {
   }
 
   return (
-    <div className={`${className} space-x-2`}>
+    <div className={`${className} flex flex-wrap justify-center`}>
       {movesArray.map((moveOption) => (
         <button
           key={moveOption}
           onClick={() => handleMoveSelection(moveOption)}
           disabled={move === moveOption}
-          className={`p-4 border rounded-lg hover:border-purple-500 ${move === moveOption ? 'bg-purple-500/50 border-purple-500' : ''}`}
+          className={`m-3 w-32 aspect-video border rounded-lg hover:border-purple-500 ${move === moveOption ? 'bg-purple-500/50 border-purple-500' : ''}`}
         >
           {Move[moveOption]}
         </button>

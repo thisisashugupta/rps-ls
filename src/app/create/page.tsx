@@ -19,7 +19,7 @@ export default function Page() {
     <>
     <main className="flex min-h-screen flex-col items-center">
       <div className='w-full h-16' />
-      {isConnected && <div className="max-w-7xl w-full flex flex-col items-center justify-center p-12 font-mono text-sm">
+      {isConnected && <div className="max-w-7xl w-full flex flex-col items-center justify-center p-4 font-mono text-sm">
         <J1Rules />
         <CreateGame />
         <ResetGame />
